@@ -18,7 +18,7 @@ public class PairMatchingController {
         pairMatchingHistory = new PairMatchingHistory();
     }
 
-    public void run() throws IOException {
+    public void run() {
         while (true) {
             String selectKey = InputView.getSelectKey();
             if (selectKey.equals("1")) {
@@ -37,7 +37,7 @@ public class PairMatchingController {
         }
     }
 
-    private void one() throws IOException {
+    private void one() {
         try {
             OutputView.printCourseLevelMission();
             String input = InputView.getCourseLevelMission();
@@ -47,7 +47,7 @@ public class PairMatchingController {
             Mission mission = Mission.findByNameAndLevel(split[2], level);
             List<String> pair = PairMaker.makePair(course);
             setHistory(course, mission, pair);
-        } catch (IllegalArgumentException illegalArgumentException) {
+        } catch (IllegalArgumentException | IOException illegalArgumentException) {
             System.out.println(illegalArgumentException.getMessage());
             one();
         }
