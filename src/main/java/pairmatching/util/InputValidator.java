@@ -20,4 +20,11 @@ public class InputValidator {
         }
         return input;
     }
+
+    public static String validateRematchKey(String input) throws IllegalArgumentException {
+        if (!input.equals("네") && !input.equals("아니오")) {
+            throw new IllegalArgumentException(INPUT_ERROR);
+        }
+        return input;
+    }
 }
