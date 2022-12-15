@@ -1,6 +1,7 @@
 package pairmatching.domain;
 
 public enum Course {
+
     BACKEND("백엔드"),
     FRONTEND("프론트엔드");
 
