@@ -6,20 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class crewReader {
+public class CrewReader {
 
     private static final String FRONT_PATH = "src/main/resources/frontend-crew.md";
     private static final String BACK_PATH = "src/main/resources/backend-crew.md";
-    private final BufferedReader frontReader;
-    private final BufferedReader backReader;
 
-    public crewReader() throws IOException {
-        frontReader = new BufferedReader(new FileReader(FRONT_PATH));
-        backReader = new BufferedReader(new FileReader(BACK_PATH));
-    }
-
-
-    public List<String> getFrontNames() throws IOException {
+    public static List<String> getFrontNames() throws IOException {
+        BufferedReader frontReader = new BufferedReader(new FileReader(FRONT_PATH));
         List<String> frontNames = new ArrayList<>();
         while (true) {
             String name = frontReader.readLine();
@@ -31,7 +24,8 @@ public class crewReader {
         return frontNames;
     }
 
-    public List<String> getBackNames() throws IOException {
+    public static List<String> getBackNames() throws IOException {
+        BufferedReader backReader = new BufferedReader(new FileReader(BACK_PATH));
         List<String> backNames = new ArrayList<>();
         while (true) {
             String name = backReader.readLine();
