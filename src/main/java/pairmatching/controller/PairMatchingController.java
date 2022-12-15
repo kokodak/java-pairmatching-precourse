@@ -1,22 +1,84 @@
 package pairmatching.controller;
 
+import java.io.IOException;
+import java.util.List;
+import pairmatching.domain.Course;
+import pairmatching.domain.Level;
+import pairmatching.domain.Mission;
+import pairmatching.domain.PairMatchingHistory;
+import pairmatching.util.PairMaker;
 import pairmatching.view.InputView;
+import pairmatching.view.OutputView;
 
 public class PairMatchingController {
 
-    public void run() {
-        String selectKey = InputView.getSelectKey();
-        if (selectKey.equals("1")) {
+    PairMatchingHistory pairMatchingHistory;
 
+    public PairMatchingController() {
+        pairMatchingHistory = new PairMatchingHistory();
+    }
+
+    public void run() throws IOException {
+        while (true) {
+            String selectKey = InputView.getSelectKey();
+            if (selectKey.equals("1")) {
+                one();
+            }
+            if (selectKey.equals("2")) {
+                two();
+            }
+            if (selectKey.equals("3")) {
+                OutputView.printPairMatchingInitialization();
+                pairMatchingHistory.initializeHistory();
+            }
+            if (selectKey.equals("Q")) {
+                break;
+            }
         }
-        if (selectKey.equals("2")) {
+    }
 
+    private void one() throws IOException {
+        try {
+            OutputView.printCourseLevelMission();
+            String input = InputView.getCourseLevelMission();
+            String[] split = input.split(", ");
+            Course course = Course.findByName(split[0]);
+            Level level = Level.findByName(split[1]);
+            Mission mission = Mission.findByNameAndLevel(split[2], level);
+            List<String> pair = PairMaker.makePair(course);
+            setHistory(course, mission, pair);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            System.out.println(illegalArgumentException.getMessage());
+            one();
         }
-        if (selectKey.equals("3")) {
+    }
 
+    private void two() {
+        try {
+            OutputView.printCourseLevelMission();
+            String input = InputView.getCourseLevelMission();
+            String[] split = input.split(", ");
+            Course course = Course.findByName(split[0]);
+            Level level = Level.findByName(split[1]);
+            Mission mission = Mission.findByNameAndLevel(split[2], level);
+            List<String> pair = pairMatchingHistory.getHistory(course, mission);
+            OutputView.printPairMatchingResult(pair);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            System.out.println(illegalArgumentException.getMessage());
+            two();
         }
-        if (selectKey.equals("Q")) {
+    }
 
+    private void setHistory(Course course, Mission mission, List<String> pair) {
+        if (pairMatchingHistory.isHistoryEmpty(course, mission)) {
+            pairMatchingHistory.setHistory(course, mission, pair);
+            OutputView.printPairMatchingResult(pair);
+            return;
+        }
+        String input = InputView.getRematchKey();
+        if (input.equals("네")) {
+            pairMatchingHistory.setHistory(course, mission, pair);
+            OutputView.printPairMatchingResult(pair);
         }
     }
 }
